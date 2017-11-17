@@ -143,7 +143,7 @@ int emptyList(List *p) {
 List *printList(List *p) {
     Node *q;
     if (emptyList(p)) {
-        cout << "A fila esta vazia!\n";
+        cout << "A fila esta vazia!";
         return p;
     }
     q = p->front;
@@ -212,39 +212,25 @@ int removeFromFront(List *p) {
 }
 
 /**
- * Função passa o node q de uma fila f para outra fila p
- */
-Node *insertNodeInF1(List *p, Node *q, List *f) {	
-	insertAtRear(p, q->data);
-   	q = nextNode(q);
-   	removeFromFront(f);	
-	return q;
-}
-
-
-/**
  * Funcao cocatena as filas;
  */
 Group *concatenate(Group *g) {
 	List *p;
-	Node *q, *w;
 	int i;
-	//criando fila de apoio
     p = newList();
-    //pegando os primeiros nos das filas
-    q = g->f1->front;
-    w = g->f2->front;
-    //enquanto as filas nao estiverem vazias
-    while (!emptyList(g->f1) || !emptyList(g->f2)) {
-		//concatenando filas
-    	if(q != NULL){
-    		q = insertNodeInF1(p, q, g->f1);
-		}
-		if(w != NULL){
-			w = insertNodeInF1(p, w, g->f2);
-		}
+    while (!emptyList(g->f1) && !emptyList(g->f2)) {
+      if(!emptyList(g->f1)) {
+      	  i = g->f1->front->data;
+          insertAtRear(p, i);
+          removeFromFront(g->f1);
+      }
+      if(!emptyList(g->f2)) {
+      	  i = g->f1->front->data;
+          insertAtRear(p, i);
+          removeFromFront(g->f2);
+      }
     }
-    //referenciando fila de apoio p para f1;
+
     g->f1 = p;
 
     return g;
@@ -267,20 +253,20 @@ Node *findInList(List *p, int n) {
 
 List *instantiatingQueue(List *p) {
     int elem;
-    cout << "\nDigite o valor do primeiro no da fila f1 ou o digito 0 para sair: ";
+    cout << "Digite o valor do primeiro no da fila f1 ou o digito 0 para sair: ";
     cin >> elem;
     while (elem != 0) {
         // Inserindo no final da fila
         insertAtRear(p, elem);
 
-        cout << "\nDigite o valor do proximo no da fila f1 ou 0 para sair: ";
+        cout << "Digite o valor do proximo no da fila f1 ou 0 para sair: ";
         cin >> elem;
     }
     return p;
 }
 
 /**
- * Funcao Principal
+ * FunÃ§Ã£o principal
  */
 int main(int argc, char** argv) {
     Group *g;
@@ -294,27 +280,21 @@ int main(int argc, char** argv) {
     g->f2 = instantiatingQueue(g->f2);
 
     // Exibindo filas
-    cout << "\n\nfila f1 antes de concatenar: ";
+    cout << "\nfila f1 antes de concatenar: \n";
         printList(g->f1);
-    cout << "\n\nfila f2 antes de concatenar: ";
+    cout << "\nfila f2 antes de concatenar: \n";
         printList(g->f2);
 
-	//Se nenhuma as duas filas nao estiverem vazias
-    if (!emptyList(g->f1) && !emptyList(g->f2))  
-	{
-		//concatenando filas
-       	g = concatenate(g);
-       	
-        // Exibindo filas concatenadas
-    	cout << "\n\nfila f1 concatenada: \n";
+    if (!emptyList(g->f1) && !emptyList(g->f2))  {
+       g = concatenate(g);
+    }
+
+	 // Exibindo filas concatenadas
+    cout << "\nfila f1 concatenada: \n";
         printList(g->f1);
-    	cout << "\n\nfila f2: \n";
+    cout << "\nfila f2: \n";
         printList(g->f2);
-        
-    } else {
-    	cout << "As filas estão vazias!";
-	}
-	
+
     cout << "\n";
     system("pause");
     return 0;

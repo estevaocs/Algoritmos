@@ -3,10 +3,10 @@
 
 using namespace std;
 
-// Nó - Representa um elemento da lista
+// No - Representa um elemento da lista
 
 /**
- * Estrutura do nó
+ * Estrutura do no
  */
 struct node {
     int data;
@@ -16,7 +16,7 @@ struct node {
 typedef struct node Node;
 typedef Node *Ptrnode;
 
-/* Operações sobre um nó */
+/* Opera�oes�es sobre um no */
 Node *newNode(int n) {
     Node *q;
     q = new Node();
@@ -26,7 +26,7 @@ Node *newNode(int n) {
 }
 
 /**
- * Liberando memoria do Nó
+ * Liberando memoria do No
  */
 void freeNode(Node *p) {
     delete(p);
@@ -34,7 +34,7 @@ void freeNode(Node *p) {
 }
 
 /**
- * Função que imprime nó
+ * Funcao que imprime no
  */
 Node *printNode(Node *p) {
     cout << p->data;
@@ -43,35 +43,49 @@ Node *printNode(Node *p) {
 // Estrutura da Lista
 
 typedef struct {
-    Node *higher;
-    int average;
     Node *front;
     Node *rear;
 } List;
 
-/* Operações sobre uma Lista */
+// Estrutura de um grupo de duas filas f1 e f2
+typedef struct {
+	List *f1;
+	List *f2;
+} Group;
+
+/* Operac�es sobre uma fila */
 /**
- * Função que cria uma nova lista vazia
+ * Funcao que cria uma nova fila vazia
  */
 List *newList() {
     List *p;
     p = new List();
-    p->higher = NULL;
-    p->average = 0;
     p->front = NULL;
     p->rear = NULL;
     return p;
 }
 
+/* Operac�es sobre uma fila */
 /**
- * Função que retorna a o proximo nó da fila
+ * Funcao que cria uma nova fila vazia
+ */
+Group *newGroup() {
+    Group *g;
+    g = new Group();
+    g->f1 = newList();
+    g->f2 = newList();
+    return g;
+}
+
+/**
+ * Funcao que retorna a o proximo no da fila
  */
 Node *nextNode(Node *p) {
     return p->next;
 }
 
 /**
- * Função que limpa todos os nós da fila
+ * Funcaoo que limpa todos os nos da fila
  */
 List *clearList(List *p) {
     Node *q, *w;
@@ -86,8 +100,9 @@ List *clearList(List *p) {
     return p;
 }
 
+
 /**
- * Função que libera a memoria utilizada por uma lista
+ * Funcao que libera a memoria utilizada por uma lista
  */
 void freeList(List *p) {
     // Memória usada por cada nó
@@ -98,7 +113,22 @@ void freeList(List *p) {
 }
 
 /**
- * Função que verifica se a lista está vazia
+ * Funcao que libera a memoria utilizada por uma lista
+ */
+void freeGroup(Group *g) {
+    // Mememoria usada por cada no
+    clearList(g->f1);
+    // Mememoria usada pela estrutura
+    delete(g->f1);
+     // Mememoria usada por cada no
+    clearList(g->f2);
+    // Mememoria usada pela estrutura
+    delete(g->f2);
+    return;
+}
+
+/**
+ * Funcao que verifica se a lista esta vazia
  */
 int emptyList(List *p) {
     if (p->front == NULL)
@@ -108,12 +138,12 @@ int emptyList(List *p) {
 }
 
 /**
- * função que printa a Lista
+ * funcao que printa a Lista
  */
 List *printList(List *p) {
     Node *q;
     if (emptyList(p)) {
-        cout << "A lista está vazia!";
+        cout << "A fila esta vazia!";
         return p;
     }
     q = p->front;
@@ -182,32 +212,33 @@ int removeFromFront(List *p) {
 }
 
 /**
- * Função que retira o numeros negativos da fila;
+ * Funcao que retira o numeros negativos da fila;
  */
-List[] *concatenate(List *f1, List *f2) {
-    List *p, lists[2];
+Group *concatenate(Group *g) {
+	List *p;
+	int i;
     p = newList();
-    while (!emptyList(f1) && !emptyList(f2)) {
-      if(!emptyList(f1)) {
-          insertAtRear(p, f1->front->data);
-          removeFromFront(f1);
+    while (!emptyList(g->f1) && !emptyList(g->f2)) {
+      if(!emptyList(g->f1)) {
+      	  i = g->f1->front->data;
+          insertAtRear(p, i);
+          removeFromFront(g->f1);
       }
-      if(!emptyList(f2)) {
-          insertAtRear(p, f2->front->data);
-          removeFromFront(f2);lists
-      }lists
+      if(!emptyList(g->f2)) {
+      	  i = g->f1->front->data;
+          insertAtRear(p, i);
+          removeFromFront(g->f2);
+      }
     }
 
-    f1 = p;
+    g->f1 = p;
     clearList(p);
-    lists[0] = f1;
-    lists[1] = f2;
 
-    return lists;
+    return g;
 }
 
 /**
- * Função que busca um determinado nó na fila
+ * Funcao que busca um determinado no na fila
  */
 Node *findInList(List *p, int n) {
     Node *q;
@@ -221,7 +252,7 @@ Node *findInList(List *p, int n) {
     return q;
 }
 
-List *instantiatingQueue(List *p;) {
+List *instantiatingQueue(List *p) {
     int elem;
     cout << "Digite o valor do primeiro no da fila f1 ou o digito 0 para sair: ";
     cin >> elem;
@@ -239,28 +270,32 @@ List *instantiatingQueue(List *p;) {
  * Função principal
  */
 int main(int argc, char** argv) {
-    List *f1, *f2;
+    Group *g;
     int elem;
     Node *q;
-
-    // Criando as filas
-    f1 = newList(f1);
-    f2 = newList(f2);
+    
+    g = newGroup();
 
     //instanciando filas
-    f1 = instantiatingQueue();
-    f2 = instantiatingQueue();
+    g->f1 = instantiatingQueue(g->f1);
+    g->f2 = instantiatingQueue(g->f2);
 
     // Exibindo filas
     cout << "\nfila f1 antes de concatenar: \n";
-        printList(f1);
+        printList(g->f1);
     cout << "\nfila f2 antes de concatenar: \n";
-        printList(f2);
+        printList(g->f2);
 
-    if (!emptyList(f1) && !emptyList(f1))  {
-        concatenate
+    if (!emptyList(g->f1) && !emptyList(g->f2))  {
+       g = concatenate(g);
     }
-
+	
+	 // Exibindo filas concatenadas
+    cout << "\nfila f1 concatenada: \n";
+        printList(g->f1);
+    cout << "\nfila f2: \n";
+        printList(g->f2);
+	
     cout << "\n";
     system("pause");
     return 0;
